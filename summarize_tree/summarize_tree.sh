@@ -1,11 +1,8 @@
-#!/bin/bash
+#!/usr/bin/bash
 
-find $1 -type d | wc -l > dirs 
-find $1 -type f | wc -l > files
-read dirs < dirs
-read files < files
-rm dirs;
-rm files;
-echo "processed all the files from $1"
+Directory=$1
+cd $Directory
+files=$(find . -type f|wc -l)
+dirs=$(find . -type d|wc -l)
 echo "There were $dirs directories."
-echo "there were $files regular files."
+echo "There were $files regular files."
