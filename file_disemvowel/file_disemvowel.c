@@ -25,30 +25,49 @@ int copy_non_vowels(int num_chars, char* in_buf, char* out_buf){
 }
 
 void disemvowel(FILE* inputFile, FILE* outputFile){
-	char buffer[BUF_SIZE + 1];
-	int amountRead = fread(buffer, sizeof(char), BUF_SIZE, inputFile);
-	buffer[BUF_SIZE]= '\0';
-	printf("%s", buffer);
+	char* in_buffer = (char*) calloc(BUF_SIZE + 1,sizeof(char));
+	char* out_buffer = (char*) calloc(BUF_SIZE+1,sizeof(char));
+	int amountRead=0;
+	bool running = true;
+	int num_non_vowels;
+	while(running){
+		amountRead = (int)fread(in_buffer,sizeof(char),BUF_SIZE,inputFile);
+	//	printf("Read %d\n",amountRead);
+		if(!amountRead){
+			break;
+		}
+		in_buffer[amountRead]='\0';
+		//printf("%s\n\n",in_buffer);
+		num_non_vowels = copy_non_vowels(amountRead,in_buffer,out_buffer);
+		fwrite(out_buffer,sizeof(char),num_non_vowels,outputFile);
+	}
+	fclose(outputFile);
+	fclose(inputFile);
+	free(in_buffer);
+	free(out_buffer);
 }
 
 
 int main(int argc, char *argv[]){
 	FILE *inputFile;
 	FILE *outputFile;
-	if(argc == 0){
+	if(argc == 1){
 		inputFile = stdin;
 		outputFile = stdout;
 		disemvowel(inputFile,outputFile);
 		return 0;
-	} else if(argc == 1){
-		inputFile = fopen(argv[0],"r");
+	} else if(argc == 2){
+		inputFile = fopen(argv[1],"r");
 		outputFile = stdout;
 		disemvowel(inputFile,outputFile);
 		return 0;
-	} else if(argc == 2){
-		inputFile = fopen(argv[0],"r");
-		outputFile = fopen(argv[1],"w");
+	} else if(argc == 3){
+		inputFile = fopen(argv[1],"r");
+		outputFile = fopen(argv[2],"w");
 		disemvowel(inputFile,outputFile);
 		return 0;
+	} else {
+		printf("Invalid number of args");
+		exit(0);
 	}
 }
