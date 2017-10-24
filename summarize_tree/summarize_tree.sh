@@ -1,5 +1,5 @@
 #!/usr/bin/bash
-
+#searchs for files and dirs using find and prints them using echo
 Directory=$1
 cd $Directory
 files=$(find . -type f|wc -l)

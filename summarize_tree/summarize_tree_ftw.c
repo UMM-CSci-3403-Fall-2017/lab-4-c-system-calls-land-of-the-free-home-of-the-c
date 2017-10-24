@@ -7,7 +7,7 @@
 
 int dirCount = 0;
 int fileCount = 0;
-
+//callback looks at the typeflag of the current files and updates counts accordingly
 static int callback(const char *fpath,const struct stat *sb, int typeflag){
 	if(typeflag == FTW_D){
 		dirCount++;
